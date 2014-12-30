@@ -1,0 +1,16 @@
+{
+  "name": "mocha-singlemodule-boilerplate",
+  "version": "0.0.1",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "lib",
+    "node_packages"
+  ],
+  "dependencies": {
+    "requirejs": "2.1.2",
+    "underscore": "1.4.3",
+    "mocha": "1.21.4",
+    "chai": "1.9.1"
+  }
+}
