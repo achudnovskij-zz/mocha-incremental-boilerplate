@@ -48,11 +48,33 @@ At this moment all suites are still loaded, even though you need to run one suit
 4. Each subsequent refresh, requires suite/dependency files will be loaded only. <br/>
 So you'll need less time to test a minor change or run the debugger to the required breakpoint.
 
-##### How it works?
+#### How it works?
 Project contains  `mocha-modules-cache.js` file which does the following:
 1. When tests are run - keep track of the module names which contained the tests which were actually run.
 2. On next test run - check if it has cache on module names for the current 'grep' query. 
    - If the cache is in place - use it to load the rewquired files only.
    - Otherwise - go to step 1. and collect the cache.
 
-### Run tests
+### Incrementally run tests in Grunt
+1. Ensure grunt and node_modules are installed
+2. Start grunt watch task 
+```
+cd /mocha-incremental-boilerplate
+grunt karma:incremental
+```
+3. Wait for watch:karma_warmup task to be completed.
+4. Edit one of functional or test files (knapsack or quicksort algorithms) 
+5. Tests for the single edited file should be run in the terminal
+
+#### How it works?
+1. This approach requires certain conventions to work
+    - Tests are truly `unit` level tests: Test module `functionCode-test.js` should test `functionCode.js` module only. If the test file implicitly test other modules, changes in those will not lead to test to be executed.
+    - Spec suite and functional modules have mirror folder structure. relative path to `functionCode.js` under `/src` folder should be exactly the same as `functionCode-tests.js` under `/spec/suites`
+2. When `grunt:watch` is run it immidiatelly starts `karma` with your browser (phantomjs by default)
+3. When any functional or test file is changed watcher does 2 things:
+    - Writes the name of the changed file to a temporary module
+    - Sends karma a command to rerun the tests
+4. When karma reruns the suite-runner.js, the latter uses temporary file to define which test modules to actually load. So the changed module is loaded only.
+
+
+
